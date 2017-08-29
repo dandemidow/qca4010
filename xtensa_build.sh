@@ -1,4 +1,15 @@
 #!/bin/sh
+
+#
+# Copyright (c) 2017 Arrow Electronics, Inc.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License 2.0
+# which accompanies this distribution, and is available at
+# http://apache.org/licenses/LICENSE-2.0
+# Contributors: Arrow Electronics, Inc.
+#
+
+
 ### SET THIS VARIABLE!
 XPLORER_PATH=$PWD/xtensa
 #XPLORER=1
@@ -10,14 +21,14 @@ source ./google_drive.sh
 # clear cookies
 [ -e c.f ] && rm c.f 
 
-[ ! -e private.h ] && ( echo "Put the private.h file into current directory" && exit 1 )
+[ ! -e private.h ] && { echo "Put the private.h file into current directory" && exit 1; }
 
 cat > test_xml.c << EOF
 #include <libxml2/libxml/parser.h>
 int main() { return 0; }
 EOF
 
-gcc -o test_xml test_xml.c || ( echo "There is no libxml2" && exit 1 )
+gcc -o test_xml test_xml.c || { echo "There is no libxml2" && exit 1; }
 rm test_xml*
 
 
@@ -96,6 +107,4 @@ source ./sdkenv.sh
 echo $INTERNALDIR 
 echo $FW
 cd acn-embedded/xtensa
-make || ( echo "Compilation error" && exit 1 )
-
-
+make || { echo "Compilation error" && exit 1; }
