@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+
+source r_common.exp
+
+set port [lindex $argv 0]
+# set dst [lindex $argv 1]
+
+proc source_env { file } {
+  puts "export $file"
+  set f [open $file]
+  set commands [split [read $f] "\n"]
+  close $f
+  foreach cmd $commands {
+    if {[regexp {^export (.*)=(.*)} $cmd -> var val]} then {
+        set ::env($var) $val
+    }
+  }
+}
+
+global env
+
+set cur_dir [exec pwd]
+puts "current dir $cur_dir"
+
+cd $cur_dir/4010.tx.1.1_sdk/target
+
+# source_env "$cur_dir/4010.tx.1.1_sdk/target/xtensa_env.sh"
+# source_env "$cur_dir/4010.tx.1.1_sdk/target/sdkenv.sh"
+
+cd image
+
+set chan [open "$cur_dir/run_xtensa.log" w]
+set timeout 120
+
+spawn $cur_dir/xocd/xt-ocd
+expect { 
+  -re "TraxApp" { puts "XT-OCD OK" }
+}
+
+spawn $::env(XTENSA_TOOLS_ROOT)/bin/xt-gdb -x $cur_dir/4010.tx.1.1_sdk/target/image/gdb.sdk_flash --xtensa-core=KF --xtensa-system=$::env(XTENSA_ROOT)/config
+expect {
+  -re "This GDB was configured.*xtensa-elf.*xt-gdb" { 
+    exp_send "target remote 127.0.0.1:20000\r\n" 
+    exp_continue
+  }
+  -re "TIE register will be unavailable.*xt-gdb" {
+    exp_send "sdk_flash ../bin/raw_flashimage_AR401X_REV6_IOT_MP1_hostless_unidev_singleband_iot_arrow.bin\r\n"
+    exp_continue
+  }
+  -re "sdk_flash is DONE.*xt-gdb" {
+    exp_send "reset\r\n"
+    exp_continue
+  }
+  -re "Program received signal SIGINT, Interrupt.*xt-gdb" {
+    exp_send "c\r\n"
+  }
+}
+
+spawn -open  [open $port r]
+test_suite $chan
+close $chan

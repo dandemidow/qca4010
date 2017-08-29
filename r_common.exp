@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+
+proc test_suite { chan } {
+expect {
+  -re "--- Demo \(\[^ \]*\) ---" {
+    puts $chan "$expect_out(1,string)"
+    exp_continue
+  }
+  -re "Gateway connection \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Gateway connection $expect_out(1,string)"
+    exp_continue
+  }
+  -re "Gateway config \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Gateway config $expect_out(1,string)"
+    exp_continue
+  }
+  -re "Device connection \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Device connection $expect_out(1,string)"
+    exp_continue
+  }
+  -re "Device telemetry \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Device telemetry $expect_out(1,string)"
+    exp_continue
+  }
+  -re "Device mqtt connection \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Device MQTT connection $expect_out(1,string)"
+    exp_continue
+  }
+  -re "Device mqtt telemetry \\\[\(\[^]\]*\)\\\]" {
+    puts $chan "Device MQTT telemetry $expect_out(1,string)"    
+  }
+}
+}
