@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # Copyright (c) 2017 Arrow Electronics, Inc.
@@ -16,41 +16,59 @@ XPLORER_PATH=$PWD/xtensa
 ### END
 source ./google_drive.sh
 
-
 ### Main function ###
 # clear cookies
 [ -e c.f ] && rm c.f 
 
 [ ! -e private.h ] && { echo "Put the private.h file into current directory" && exit 1; }
 
+if [ -e /usr/include/libxml2 ]; then
+  if [ ! -e /usr/include/libxml ]; then
+    echo "ln -s /usr/include/libxml2 /usr/include/libxml"
+  fi
+fi
 cat > test_xml.c << EOF
 #include <libxml2/libxml/parser.h>
 int main() { return 0; }
 EOF
 
-gcc -o test_xml test_xml.c || { echo "There is no libxml2" && exit 1; }
+gcc -o test_xml test_xml.c -I/usr/include/libxml2 || { echo "There is no libxml2" && exit 1; }
 rm test_xml*
 
+if [ ! -e /lib/ld-linux.so.2 ]; then
+  echo "There are no 32bit libraries; Please install"
+  echo "(for Ubuntu: sudo apt-get install libc6-i386)"
+  exit 1;
+fi
 
 XPLORER_INSTALLER_BASE=Xplorer-5.0.3-linux-installer
 XPLORER_INSTALLER_BIN=${XPLORER_INSTALLER_BASE}.bin
 
 if [ ! -e ${XPLORER_INSTALLER_BIN} ]; then
-  download_big_file 0BzSl3gduBcnuZnR3ZVVCWWdyZTQ ${XPLORER_INSTALLER_BIN}
+  download_big_file 0BzSl3gduBcnuZnR3ZVVCWWdyZTQ ${XPLORER_INSTALLER_BIN} || { echo "cannot download ${XPLORER_INSTALLER_BIN}" && exit 1; }
   chmod a+x ${XPLORER_INSTALLER_BIN}
-  ./${XPLORER_INSTALLER_BIN} --mode unattended --prefix ${XPLORER_PATH}
+fi
+if [ ! -e ${XPLORER_PATH}/XtDevTools/install/builds/ ]; then
+  ./${XPLORER_INSTALLER_BIN} --mode unattended --prefix ${XPLORER_PATH} || { echo "cannot run the ${XPLORER_INSTALLER_BIN}" && exit 1; }
+  if [ ! -e ${XPLORER_PATH}/XtDevTools/install/builds/ ]; then
+    echo "${XPLORER_INSTALLER_BIN} something goes wrong";
+    exit 1;
+  fi
 fi
 
 
 if [ ! -e license.dat ]; then
-  download_file 0BzSl3gduBcnuZEROQVZuRVQ1Vnc license.dat
-  cp license.dat ~
+  download_file 0BzSl3gduBcnuZEROQVZuRVQ1Vnc license.dat || { echo "cannot download license.dat" && exit 1; }
+  cp license.dat ~;
 fi
 
 KF_LINUX=KF_2013_3_linux.tgz
 if [ ! -e ${KF_LINUX} ]; then
   download_file 0BzSl3gduBcnuTXVocGUxUERCb00 ${KF_LINUX}
-  tar -xf KF_2013_3_linux.tgz -C ${XPLORER_PATH}/XtDevTools/install/builds/
+fi
+
+if [ ! -e ${XPLORER_PATH}/XtDevTools/install/builds/RE-2013.3-linux/KF/ ]; then 
+  tar -xf ${KF_LINUX} -C ${XPLORER_PATH}/XtDevTools/install/builds/ || { echo "${KF_LINUX} error" && exit 1; }
   cd ${XPLORER_PATH}/XtDevTools/install/builds/RE-2013.3-linux/KF/
   ./install --xtensa-tools ${XPLORER_PATH}/XtDevTools/install/tools/RE-2013.3-linux/XtensaTools/ --registry ${XPLORER_PATH}/XtDevTools/XtensaRegistry/
   cd -
@@ -80,6 +98,8 @@ fi
 QCA_ARCH=14apr_qca4010.tx_.1.1_4.0.1.24.tgz
 if [ ! -e ${QCA_ARCH} ]; then
   download_file 0BzSl3gduBcnubGRQRkViSTBaak0 ${QCA_ARCH}
+fi 
+if [ ! -e 4010.tx.1.1_sdk ]; then
   tar -xf ${QCA_ARCH}
   mv xtensa_env.sh 4010.tx.1.1_sdk/target/
   sed "s/-objdump/-xt-objdump/" -i 4010.tx.1.1_sdk/target/demo/sdk_flash/make_flash_hostless.sh
@@ -108,3 +128,4 @@ echo $INTERNALDIR
 echo $FW
 cd acn-embedded/xtensa
 make || { echo "Compilation error" && exit 1; }
+
