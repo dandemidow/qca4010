@@ -15,7 +15,7 @@ fi
 if [ ! -e release ]; then
   tar -xf ${FTDI_DRIVER_ARCH}
   cd release
-  sudo cp build/libftd2xx.* /usr/local/bin
+  sudo cp build/libftd2xx.* /usr/local/lib  
   sudo chmod 0755 /usr/local/lib/libftd2xx.so.1.4.6
   sudo ln -sf /usr/local/lib/libftd2xx.so.1.4.6 /usr/local/lib/libftd2xx.so
   cd -
