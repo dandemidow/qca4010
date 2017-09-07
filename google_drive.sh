@@ -9,7 +9,7 @@
 # Contributors: Arrow Electronics, Inc.
 #
 
-CHECK_CRT="-k"
+#CHECK_CRT="-k"
 
 download_big_file() {
   FILEID=$1
