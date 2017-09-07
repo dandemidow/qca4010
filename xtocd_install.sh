@@ -1,15 +1,5 @@
 #!/bin/bash
 
-#
-# Copyright (c) 2017 Arrow Electronics, Inc.
-# All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Apache License 2.0
-# which accompanies this distribution, and is available at
-# http://apache.org/licenses/LICENSE-2.0
-# Contributors: Arrow Electronics, Inc.
-#
-
-
 INSTALL_PATH=$PWD/xocd/
 
 C_INSTALL_PATH=/usr/src/linux/include
@@ -20,6 +10,9 @@ FTDI_DRIVER_ARCH=libftd2xx-i386-1.4.6.tgz
 
 if [ ! -e ${FTDI_DRIVER_ARCH} ]; then
   download_file 0BzSl3gduBcnueHBjWDhTVTcyU1E ${FTDI_DRIVER_ARCH}
+fi
+
+if [ ! -e release ]; then
   tar -xf ${FTDI_DRIVER_ARCH}
   cd release
   sudo cp build/libftd2xx.* /usr/local/bin
@@ -35,6 +28,7 @@ if [ ! -e ${INSTALL_PATH} ]; then
   cd xtensa/XtDevTools/downloads/RE-2013.3/tools/
   sudo ./xt-ocd-10.0.3-linux-installer --mode unattended --prefix ${INSTALL_PATH}
   cd -
+  [ ! -e ${INSTALL_PATH} ] && { echo "There is no ${INSTALL_PATH}" && exit 1; }
   sudo cp topology.xml ${INSTALL_PATH}
   sudo mv ${INSTALL_PATH}/FTDI ${INSTALL_PATH}/orig-FTDI
   sudo mkdir ${INSTALL_PATH}/FTDI
