@@ -11,6 +11,9 @@
 
 
 COM=${COM:-/dev/ttyUSB0}
+XTEST=${XTEST:-yes}
+XOCD=${XOCD:-yes}
+XADDR=${XADDR:-127.0.0.1}
 
 ftdi_mod=$(lsmod | grep ftdi_sio)
 if [ $ftdi_mod ]; then 
@@ -30,4 +33,4 @@ source ./sdkenv.sh
 
 cd -
 sudo chmod a+wr $COM
-./run_xtensa.exp $COM
+./run_xtensa.exp $COM $XOCD $XADDR $XTEST
