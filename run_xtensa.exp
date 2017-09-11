@@ -13,7 +13,9 @@
 source r_common.exp
 
 set port [lindex $argv 0]
-# set dst [lindex $argv 1]
+set daemon [lindex $argv 1]
+set dst [lindex $argv 2]
+set test [lindex $argv 3]
 
 proc source_env { file } {
   puts "export $file"
@@ -41,16 +43,17 @@ cd image
 
 set chan [open "$cur_dir/run_xtensa.log" w]
 set timeout 120
-
+if { $daemon == "yes" } {
 spawn $cur_dir/xocd/xt-ocd
 expect { 
   -re "TraxApp" { puts "XT-OCD OK" }
+}
 }
 
 spawn $::env(XTENSA_TOOLS_ROOT)/bin/xt-gdb -x $cur_dir/4010.tx.1.1_sdk/target/image/gdb.sdk_flash --xtensa-core=KF --xtensa-system=$::env(XTENSA_ROOT)/config
 expect {
   -re "This GDB was configured.*xtensa-elf.*xt-gdb" { 
-    exp_send "target remote 127.0.0.1:20000\r\n" 
+    exp_send "target remote $dst:20000\r\n" 
     exp_continue
   }
   -re "TIE register will be unavailable.*xt-gdb" {
@@ -66,6 +69,8 @@ expect {
   }
 }
 
+if { $test == "yes" } {
 spawn -open  [open $port r]
 test_suite $chan
+}
 close $chan
