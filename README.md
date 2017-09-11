@@ -4,7 +4,7 @@
 ###### UBUNTU (14.04)
 
 This packages should be installed:
-git, lib32gcc-4.8-dev, lib32stdc++6, lib32z1-dev, libxml2-dev, linux-source, expect
+git, lib32gcc-4.8-dev, lib32stdc++6, lib32z1-dev, libxml2-dev, linux-source, expect, lib32ncurses5-dev
 
 
 You can intsall it by:
@@ -16,13 +16,13 @@ sudo apt-get install git lib32gcc-4.8-dev lib32stdc++6 lib32z1-dev libxml2-dev l
 ###### openSUSE (Leap42.3)
 
 This packages should be installed:
-git, gcc-32bit, libxml2-devel, make, kernel-devel, kernel-source, kernel-default-devel, expect
+git, gcc-32bit, libxml2-devel, make, kernel-devel, kernel-source, kernel-default-devel, expect, ncurses5-devel
 
 ```
-sudo zypper in git gcc-32bit libxml2-devel make kernel-devel kernel-source kernel-default-devel expect
+sudo zypper in git gcc-32bit libxml2-devel make kernel-devel kernel-source kernel-default-devel expect ncurses5-devel
 ```
 
-## Install
+## Build the firmware
 
 Run the *xtensa_build.sh* to build qca4010 firmware.
 
@@ -30,6 +30,8 @@ Run the *xtensa_build.sh* to build qca4010 firmware.
 ## Intsall XOCD
 
 If you use a virtual machine probably it will better to install XOCD in your host machine (for the better performance and it helps to avoid usb issues as well)
+
+**Note:** And if you already installed the xt-ocd daemon on a host machine there is no necessary to install this daemon on a guest system.
 
 - Windows
 
