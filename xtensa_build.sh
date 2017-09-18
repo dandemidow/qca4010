@@ -127,5 +127,16 @@ source ./sdkenv.sh
 echo $INTERNALDIR 
 echo $FW
 cd acn-embedded/xtensa
+case "$1" in 
+"private")
+less ../acn-sdk-c/private.h
+exit 0;
+;;
+"rebuild")
+{ make clean && make; } || { echo "Compilation error" && exit 1; }
+;;
+*)
 make || { echo "Compilation error" && exit 1; }
+;;
+esac 
 

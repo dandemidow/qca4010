@@ -15,13 +15,22 @@ XTEST=${XTEST:-yes}
 XOCD=${XOCD:-yes}
 XADDR=${XADDR:-127.0.0.1}
 
-ftdi_mod=$(lsmod | grep ftdi_sio)
-if [ $ftdi_mod ]; then 
-  sudo rmmod ftdi_sio
-fi
-usbserial=$(lsmod | grep usbserial)
-if [ $usbserial_mod ]; then 
-  sudo rmmod usbserial
+echo "*****************************************"
+echo -e "* use xt-ocd daemon \t${XOCD}\t\t*"
+echo -e "* xt-ocd address\t${XADDR}\t*"
+echo -e "* use debug test\t${XTEST}\t\t*"
+echo -e "* default serial\t${COM}\t*"
+echo "*****************************************"
+
+if [ ${XOCD} == yes ]; then
+  ftdi_mod=$(lsmod | grep ftdi_sio)
+  if [ ! -z "$ftdi_mod" ]; then 
+    sudo rmmod ftdi_sio
+  fi
+#  usbserial=$(lsmod | grep usbserial)
+#  if [ ! -z $usbserial_mod ]; then 
+#    sudo rmmod usbserial
+#  fi
 fi
 
 export MAIN_PATH=$PWD
@@ -32,5 +41,7 @@ source ./xtensa_env.sh
 source ./sdkenv.sh
 
 cd -
+if [ ${XTEST} == yes ]; then
 sudo chmod a+wr $COM
+fi
 ./run_xtensa.exp $COM $XOCD $XADDR $XTEST

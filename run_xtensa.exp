@@ -53,19 +53,19 @@ expect {
 spawn $::env(XTENSA_TOOLS_ROOT)/bin/xt-gdb -x $cur_dir/4010.tx.1.1_sdk/target/image/gdb.sdk_flash --xtensa-core=KF --xtensa-system=$::env(XTENSA_ROOT)/config
 expect {
   -re "This GDB was configured.*xtensa-elf.*xt-gdb" { 
-    exp_send "target remote $dst:20000\r\n" 
+    exp_send "target remote $dst:20000\n" 
     exp_continue
   }
   -re "TIE register will be unavailable.*xt-gdb" {
-    exp_send "sdk_flash ../bin/raw_flashimage_AR401X_REV6_IOT_MP1_hostless_unidev_singleband_iot_arrow.bin\r\n"
+    exp_send "sdk_flash ../bin/raw_flashimage_AR401X_REV6_IOT_MP1_hostless_unidev_singleband_iot_arrow.bin\n"
     exp_continue
   }
   -re "sdk_flash is DONE.*xt-gdb" {
-    exp_send "reset\r\n"
+    exp_send "reset\n"
     exp_continue
   }
   -re "Program received signal SIGINT, Interrupt.*xt-gdb" {
-    exp_send "c\r\n"
+    exp_send "c\n"
   }
 }
 
