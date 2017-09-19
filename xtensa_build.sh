@@ -20,7 +20,7 @@ source ./google_drive.sh
 # clear cookies
 [ -e c.f ] && rm c.f 
 
-[ ! -e private.h ] && [ ! -e 4010.tx.1.1_sdk/target/acn-embedded/acn-sdk-c/private.h ] { echo "Put the private.h file into current directory" && exit 1; }
+[ ! -e private.h ] && { echo "Put the private.h file into current directory" && exit 1; }
 
 if [ -e /usr/include/libxml2 ]; then
   if [ ! -e /usr/include/libxml ]; then
@@ -119,7 +119,7 @@ if [ ! -e acn-embedded ]; then
   cp acn-embedded/xtensa/config/libjson.a ./lib/
   cp acn-embedded/xtensa/config/index.html ./demo/sdk_flash/
   cat acn-embedded/xtensa/config/tunable_input.txt | sed 's@\/home\/somebody\/Arrow\/QCA\/4010.tx.1.1_sdk\/target@'"$SDK_ROOT"'@g' > ./tool/tunable/tunable_input.txt
-  cp ${PRIVATE_FILE} acn-embedded/acn-sdk-c/
+  ln -s ${PRIVATE_FILE} acn-embedded/acn-sdk-c/
 fi
 
 source ./xtensa_env.sh
