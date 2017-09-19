@@ -20,7 +20,7 @@ source ./google_drive.sh
 # clear cookies
 [ -e c.f ] && rm c.f 
 
-[ ! -e private.h ] && { echo "Put the private.h file into current directory" && exit 1; }
+[ ! -e private.h ] && [ ! -e 4010.tx.1.1_sdk/target/acn-embedded/acn-sdk-c/private.h ] { echo "Put the private.h file into current directory" && exit 1; }
 
 if [ -e /usr/include/libxml2 ]; then
   if [ ! -e /usr/include/libxml ]; then
