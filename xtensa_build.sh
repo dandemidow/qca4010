@@ -135,6 +135,12 @@ exit 0;
 "rebuild")
 { make clean && make; } || { echo "Compilation error" && exit 1; }
 ;;
+"up")
+  cd ../acn-sdk-c
+  git pull origin master
+  cd -
+  git pull origin master
+;;
 *)
 make || { echo "Compilation error" && exit 1; }
 ;;
