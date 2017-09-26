@@ -66,6 +66,7 @@ expect {
   }
   -re "Program received signal SIGINT, Interrupt.*xt-gdb" {
     exp_send "c\n"
+    sleep 1
   }
 }
 

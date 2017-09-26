@@ -16,6 +16,29 @@ XPLORER_PATH=$PWD/xtensa
 ### END
 source ./google_drive.sh
 
+usage()
+{
+cat << XTENSA_USAGE
+
+Options:
+
+build
+    Build the Arrow firmware for QCA4010
+
+rebuild
+    Clean and build the firmware again
+
+private
+    View and edit the private.h file
+
+up
+    Update the asn-sdk-c and acn-embedded repositories
+
+flash
+    Flash the new firmware into a QCA board 
+XTENSA_USAGE
+}
+
 ### Main function ###
 # clear cookies
 [ -e c.f ] && rm c.f 
@@ -124,8 +147,6 @@ fi
 
 source ./xtensa_env.sh
 source ./sdkenv.sh
-echo $INTERNALDIR 
-echo $FW
 cd acn-embedded/xtensa
 case "$1" in 
 "private")
@@ -135,14 +156,21 @@ exit 0;
 "rebuild")
 { make clean && make; } || { echo "Compilation error" && exit 1; }
 ;;
+"build")
+make || { echo "Compilation error" && exit 1; }
+;;
 "up")
   cd ../acn-sdk-c
   git pull origin master
   cd -
   git pull origin master
 ;;
+"flash")
+cd ../../../../
+./run_xtensa.sh
+;;
 *)
-make || { echo "Compilation error" && exit 1; }
+usage
 ;;
 esac 
 
