@@ -139,7 +139,7 @@ source ./xtensa_env.sh
 source ./sdkenv.sh
 
 if [ ! -e acn-embedded ]; then 
-  git clone https://github.com/arrow-acs/acn-embedded.git --depth 1 --recursive
+  git clone https://github.com/arrow-acs/acn-embedded.git --recursive
   cp acn-embedded/xtensa/config/libjson.a ./lib/
   cp acn-embedded/xtensa/config/index.html ./demo/sdk_flash/
   cat acn-embedded/xtensa/config/tunable_input.txt | sed 's@\/home\/somebody\/Arrow\/QCA\/4010.tx.1.1_sdk\/target@'"$SDK_ROOT"'@g' > ./tool/tunable/tunable_input.txt
