@@ -118,22 +118,23 @@ chmod a+x xtensa_env.sh
 # mv xtensa_env.sh 
 fi
 
-QCA_ARCH=14apr_qca4010.tx_.1.1_4.0.1.24.tgz
+QCA_ARCH=qca4010.tx_.2.1_qdn.tgz
 if [ ! -e ${QCA_ARCH} ]; then
-  download_file 0BzSl3gduBcnubGRQRkViSTBaak0 ${QCA_ARCH}
+  download_big_file 1jn3KVCw9EXLQfJyf4oE2fwBvsAnph6Fy ${QCA_ARCH}
 fi 
-if [ ! -e 4010.tx.1.1_sdk ]; then
+QCA_SDK_PATH=QCA4010.TX.2.1_QDN
+if [ ! -e ${QCA_SDK_PATH} ]; then
   tar -xf ${QCA_ARCH}
-  mv xtensa_env.sh 4010.tx.1.1_sdk/target/
-  sed "s/-objdump/-xt-objdump/" -i 4010.tx.1.1_sdk/target/demo/sdk_flash/make_flash_hostless.sh
-  sed "s/-obj/-xt-obj/g" -i 4010.tx.1.1_sdk/target/tool/makeseg.sh
-  sed "s/^typedef.*size_t;/\#include <qcom\/stdint.h>/" -i 4010.tx.1.1_sdk/target/include/json.h
+  mv xtensa_env.sh ${QCA_SDK_PATH}/target/
+  sed "s/-objdump/-xt-objdump/" -i ${QCA_SDK_PATH}/target/demo/sdk_flash/make_flash_hostless.sh
+  sed "s/-obj/-xt-obj/g" -i ${QCA_SDK_PATH}/target/tool/makeseg.sh
+  # sed "s/^typedef.*size_t;/\#include <qcom\/stdint.h>/" -i 4010.tx.1.1_sdk/target/include/json.h
 fi
 
 
 ### clone repo
 PRIVATE_FILE=${PWD}/private.h
-cd 4010.tx.1.1_sdk/target/
+cd ${QCA_SDK_PATH}/target/
 source ./xtensa_env.sh
 source ./sdkenv.sh
 
