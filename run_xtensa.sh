@@ -33,8 +33,10 @@ if [ ${XOCD} == yes ]; then
 #  fi
 fi
 
+QCA_SDK_PATH=QCA4010.TX.2.1_QDN
+
 export MAIN_PATH=$PWD
-cd 4010.tx.1.1_sdk/target
+cd ${QCA_SDK_PATH}/target
 
 export TARGET_PATH=$PWD
 source ./xtensa_env.sh
