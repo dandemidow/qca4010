@@ -34,7 +34,7 @@ global env
 set cur_dir [exec pwd]
 puts "current dir $cur_dir"
 
-cd $cur_dir/4010.tx.1.1_sdk/target
+cd $cur_dir/QCA4010.TX.2.1_QDN/target
 
 # source_env "$cur_dir/4010.tx.1.1_sdk/target/xtensa_env.sh"
 # source_env "$cur_dir/4010.tx.1.1_sdk/target/sdkenv.sh"
