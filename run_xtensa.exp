@@ -50,7 +50,7 @@ expect {
 }
 }
 
-spawn $::env(XTENSA_TOOLS_ROOT)/bin/xt-gdb -x $cur_dir/4010.tx.1.1_sdk/target/image/gdb.sdk_flash --xtensa-core=KF --xtensa-system=$::env(XTENSA_ROOT)/config
+spawn $::env(XTENSA_TOOLS_ROOT)/bin/xt-gdb -x $cur_dir/QCA4010.TX.2.1_QDN/target/image/gdb.sdk_flash --xtensa-core=KF --xtensa-system=$::env(XTENSA_ROOT)/config
 expect {
   -re "This GDB was configured.*xtensa-elf.*xt-gdb" { 
     exp_send "target remote $dst:20000\n" 
