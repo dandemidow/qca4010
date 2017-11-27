@@ -138,17 +138,19 @@ cd ${QCA_SDK_PATH}/target/
 source ./xtensa_env.sh
 source ./sdkenv.sh
 
+SILEX_PATH=acn-embedded/silex
+
 if [ ! -e acn-embedded ]; then 
   git clone https://github.com/arrow-acs/acn-embedded.git --recursive
-  cp acn-embedded/xtensa/config/libjson.a ./lib/
-  cp acn-embedded/xtensa/config/index.html ./demo/sdk_flash/
-  cat acn-embedded/xtensa/config/tunable_input.txt | sed 's@\/home\/somebody\/Arrow\/QCA\/4010.tx.1.1_sdk\/target@'"$SDK_ROOT"'@g' > ./tool/tunable/tunable_input.txt
+  cp ${SILEX_PATH}/config/libjson.a ./lib/
+  cp ${SILEX_PATH}/config/index.html ./demo/sdk_flash/
+  cat ${SILEX_PATH}/config/tunable_input.txt | sed 's@\/home\/somebody\/Arrow\/QCA\/4010.tx.1.1_sdk\/target@'"$SDK_ROOT"'@g' > ./tool/tunable/tunable_input.txt
   ln -s ${PRIVATE_FILE} acn-embedded/acn-sdk-c/
 fi
 
 source ./xtensa_env.sh
 source ./sdkenv.sh
-cd acn-embedded/xtensa
+cd ${SILEX_PATH}
 case "$1" in 
 "private")
 less ../acn-sdk-c/private.h
